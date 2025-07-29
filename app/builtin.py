@@ -14,10 +14,11 @@ def echo_command(text):
         print()  # Just print a newline if no arguments
     else:
         # Join arguments with a single space and print
-        print(" ".join(shlex.split(text), posix=True))
+        text = shlex.split(text, posix=True)  # Use shlex to handle quotes and spaces
+        return " ".join(text)  # Join the parts with a single space and print
 def pwd():
     """Print the current working directory."""
-    print(os.getcwd())
+    return os.getcwd()
 def change_directory(path):
     """Change the current working directory."""
 
@@ -40,11 +41,12 @@ def change_directory(path):
     except NotADirectoryError:
         print(f"cd: {path}: Not a directory")
 def concatenate_files(file_args):
+    result = ""
     for filename in file_args:
         try:
             with open(filename, 'r') as file:
                 content = file.read()
-                print(content, end='')  # Don't add extra newline
+                result += content
         except FileNotFoundError:
             print(f"cat: {filename}: No such file or directory")
         except PermissionError:
@@ -53,7 +55,7 @@ def concatenate_files(file_args):
             print(f"cat: {filename}: Is a directory")
         except Exception as e:
             print(f"cat: {filename}: {e}")
-    print()
+    return result
 
 def exit_shell(exit_code = 0):
     sys.exit(exit_code)
